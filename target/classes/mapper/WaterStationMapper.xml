@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.WaterStationMapper">
+
+    <resultMap type="com.sunrise.domain.WaterStation" id="WaterStationResult">
+        <result property="id"    column="id"    />
+        <result property="district"    column="district"    />
+        <result property="stationName"    column="station_name"    />
+        <result property="lng"    column="lng"    />
+        <result property="lat"    column="lat"    />
+        <result property="stationCompany"    column="station_company"    />
+        <result property="waterType"    column="water_type"    />
+        <result property="waterPurpose"    column="water_purpose"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="companyLevel"    column="company_level"    />
+        <result property="waterAllowNo"    column="water_allow_no"    />
+        <result property="waterAllowAmount"    column="water_allow_amount"    />
+        <result property="beforeYearUse"    column="before_year_use"    />
+        <result property="lastYearUse"    column="last_year_use"    />
+        <result property="newYearUse"    column="new_year_use"    />
+        <result property="basin"    column="basin"    />
+        <result property="waterArea"    column="water_area"    />
+        <result property="status"    column="status"    />
+        <result property="zoomLevel"    column="zoom_level"    />
+    </resultMap>
+
+    <sql id="selectWaterStationVo">
+        select id, district, station_name, lng,lat, station_company, water_type, water_purpose, project_type, company_level,water_allow_no,water_allow_amount,before_year_use,last_year_use,new_year_use,basin,water_area,status,zoom_level
+        from water_station
+
+    </sql>
+    <sql id="selectNameVo">
+        select  station_name
+        from water_station
+    </sql>
+
+
+    <select id="selectName"  resultType="String">
+        <include refid="selectNameVo"/>
+    </select>
+
+
+
+    <select id="selectByStationName" parameterType="com.sunrise.domain.WaterStation" resultMap="WaterStationResult">
+        <include refid="selectWaterStationVo"/>
+        <where>
+            <if test="stationName != null "> and station_name = #{stationName}</if>
+        </where>
+    </select>
+
+
+    <select id="stationList" parameterType="com.sunrise.domain.WaterStation" resultMap="WaterStationResult">
+        <include refid="selectWaterStationVo"/>
+        <where>
+        <if test="params.district != null "> and district = #{params.district}</if>
+        <if test="params.stationName != null "> and station_name like "%"#{params.stationName}"%"</if>
+        <if test="params.stationCompany != null "> and station_company like "%"#{params.stationCompany}"%"</if>
+        <if test="params.waterType != null "> and water_type like "%"#{params.waterType}"%"</if>
+        <if test="params.companyLevel != null "> and company_level= #{params.companyLevel}</if>
+        <if test="params.basin != null "> and basin = #{params.basin}</if>
+        <if test="params.waterArea != null "> and water_area = #{params.waterArea}</if>
+        <if test="params.status != null "> and status = #{params.status}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="currentList" parameterType="com.sunrise.domain.WaterStation" resultMap="WaterStationResult">
+        <include refid="selectWaterStationVo"/>
+        <where>
+            <if test="params.district != null "> and district = #{params.district}</if>
+            <if test="params.stationName != null "> and station_name like "%"#{params.stationName}"%"</if>
+            <if test="params.stationCompany != null "> and station_company like "%"#{params.stationCompany}"%"</if>
+            <if test="params.waterType != null "> and water_type like "%"#{params.waterType}"%"</if>
+            <if test="params.companyLevel != null "> and company_level= #{params.companyLevel}</if>
+            <if test="params.basin != null "> and basin = #{params.basin}</if>
+            <if test="params.waterArea != null "> and water_area = #{params.waterArea}</if>
+            <if test="params.status != null "> and status = #{params.status}</if>
+        </where>
+        order by id desc
+    </select>
+
+
+    <select id="selectList" parameterType="com.sunrise.domain.WaterStation" resultMap="WaterStationResult">
+        <include refid="selectWaterStationVo"/>
+        <where>
+            <if test="stationName != null "> and station_name like "%"#{stationName}"%"</if>
+            <if test="zoomLevel != null "> and zoom_level &lt; #{zoomLevel}</if>
+        </where>
+        order by id desc
+    </select>
+
+
+    <select id="selectByCondition" parameterType="Long" resultMap="WaterStationResult">
+        <include refid="selectWaterStationVo"/>
+        <where>
+            <if test="district!= null">and district = #{district}</if>
+            <if test="companyLevel!= null">and company_level = #{companyLevel}</if>
+            <if test="basin!= null">and basin = #{basin}</if>
+            <if test="waterType!= null">and water_type =  #{waterType}</if>
+            <if test="waterArea!= null">and water_area =#{waterArea}</if>
+            <if test="status= null">and status = #{status}</if>
+        </where>
+    </select>
+
+    <update id="updateById" parameterType="com.sunrise.domain.WaterStation">
+        update water_station
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="district != null">district = #{district},</if>
+            <if test="stationName != null">station_name = #{stationName},</if>
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="stationCompany != null">station_company = #{stationCompany},</if>
+            <if test="waterType != null">water_type = #{waterType},</if>
+            <if test="waterPurpose != null">water_purpose = #{waterPurpose},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="companyLevel != null">company_level = #{companyLevel},</if>
+            <if test="waterAllowNo != null">water_allow_no = #{waterAllowNo},</if>
+            <if test="waterAllowAmount != null">water_allow_amount = #{waterAllowAmount},</if>
+            <if test="beforeYearUse != null">before_year_use = #{beforeYearUse},</if>
+            <if test="lastYearUse != null">last_year_use = #{lastYearUse},</if>
+            <if test="newYearUse != null">new_year_use = #{newYearUse},</if>
+            <if test="basin != null">basin = #{basin},</if>
+            <if test="waterArea != null">water_area = #{waterArea},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="zoomLevel != null">zoom_level = #{zoomLevel},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+
+    <insert id="insertWaterStation" parameterType="com.sunrise.domain.WaterStation">
+        insert into water_station
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="district != null">district,</if>
+            <if test="stationName != null">station_name,</if>
+            <if test="lng != null">lng,</if>
+            <if test="lat != null">lat,</if>
+            <if test="stationCompany != null">station_company,</if>
+            <if test="waterType != null">water_type,</if>
+            <if test="waterPurpose != null">water_purpose,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="companyLevel != null">company_level,</if>
+            <if test="waterAllowNo != null">water_allow_no,</if>
+            <if test="waterAllowAmount != null">water_allow_amount,</if>
+            <if test="beforeYearUse != null">before_year_use,</if>
+            <if test="lastYearUse != null">last_year_use,</if>
+            <if test="newYearUse != null">new_year_use,</if>
+            <if test="basin != null">basin,</if>
+            <if test="waterArea != null">water_area,</if>
+            <if test="status != null">status,</if>
+            <if test="zoomLevel != null">zoom_level,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="district != null">#{district},</if>
+            <if test="stationName != null">#{stationName},</if>
+            <if test="lng != null">#{lng},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="stationCompany != null">#{stationCompany},</if>
+            <if test="waterType != null">#{waterType},</if>
+            <if test="waterPurpose != null">#{waterPurpose},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="companyLevel != null">#{companyLevel},</if>
+            <if test="waterAllowNo != null">#{waterAllowNo},</if>
+            <if test="waterAllowAmount != null">#{waterAllowAmount},</if>
+            <if test="beforeYearUse != null">#{beforeYearUse},</if>
+            <if test="lastYearUse != null">#{lastYearUse},</if>
+            <if test="newYearUse != null">#{newYearUse},</if>
+            <if test="basin != null">#{basin},</if>
+            <if test="waterArea != null">#{waterArea},</if>
+            <if test="status != null">#{status},</if>
+            <if test="zoomLevel != null">#{zoomLevel},</if>
+        </trim>
+    </insert>
+
+
+
+    <delete id="deleteWaterStationById" parameterType="Long">
+        delete from water_station where id = #{id}
+    </delete>
+
+    <delete id="deleteWaterStationByIds" parameterType="String">
+        delete from water_station where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

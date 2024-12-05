@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.WaterUserMapper">
+
+    <resultMap type="com.sunrise.domain.WaterUser" id="WaterUserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="password"    column="password"    />
+        <result property="belongArea"    column="belong_area"    />
+    </resultMap>
+
+    <resultMap type="com.sunrise.domain.vo.WaterUserVo" id="WaterUserVoResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="belongArea"    column="belong_area"    />
+    </resultMap>
+
+    <sql id="selectWaterUserVo">
+        select user_id, user_name,belong_area
+        from water_user
+    </sql>
+
+
+    <select id="selectList" parameterType="com.sunrise.domain.WaterUser" resultMap="WaterUserVoResult">
+        <include refid="selectWaterUserVo"/>
+        <where>
+            <if test="userName != null "> and user_name = #{userName}</if>
+            <if test="belongArea != null "> and belong_area = #{belongArea}</if>
+        </where>
+    </select>
+
+
+    <select id="checkList" resultMap="WaterUserVoResult">
+        select user_name
+        from water_user
+    </select>
+
+    <select id="selectListByArea" resultMap="WaterUserVoResult">
+        select user_id,user_name,belong_area
+        from water_user
+        where belong_area =#{belongArea}
+    </select>
+
+
+    <select id="userLogin" parameterType="com.sunrise.domain.WaterUser" resultMap="WaterUserResult">
+        <include refid="selectWaterUserVo"/>
+        <where>
+            <if test="userName != null "> and user_name = #{userName}</if>
+            <if test="password != null "> and password = #{password}</if>
+            <if test="belongArea != null "> and belong_area = #{belongArea}</if>
+        </where>
+    </select>
+
+
+
+    <select id="selectByUserName" parameterType="com.sunrise.domain.WaterUser" resultMap="WaterUserResult">
+        <include refid="selectWaterUserVo"/>
+        where
+        user_name = #{userName}
+    </select>
+
+    <update id="editUserById" parameterType="com.sunrise.domain.WaterUser">
+        update water_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="belongArea != null">belong_area = #{belongArea},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+
+
+    <insert id="insertUser" parameterType="com.sunrise.domain.WaterUser">
+        insert into water_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null">user_name,</if>
+            <if test="password != null">password,</if>
+            <if test="belongArea != null">belong_area,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null">#{userName},</if>
+            <if test="password != null">#{password},</if>
+            <if test="belongArea != null">#{belongArea},</if>
+        </trim>
+    </insert>
+
+
+
+    <delete id="deleteUser" parameterType="Long">
+        delete from water_user where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteWaterStationByIds" parameterType="String">
+        delete from water_station where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

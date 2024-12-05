@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.OperateLogMapper">
+    <resultMap type="com.sunrise.domain.OperateLog" id="OperateLogResult">
+        <result property="operId"    column="oper_id"    />
+        <result property="title"    column="title"    />
+        <result property="method"    column="method"    />
+        <result property="requestMethod"    column="request_method"    />
+        <result property="operatorType"    column="operator_type"    />
+        <result property="operName"    column="oper_name"    />
+        <result property="operUrl"    column="oper_url"    />
+        <result property="operParam"    column="oper_param"    />
+        <result property="jsonResult"    column="json_result"    />
+        <result property="errorMsg"    column="error_msg"    />
+        <result property="operTime"    column="oper_time"    />
+    </resultMap>
+
+    <sql id="selectOperateLogVo">
+        select oper_id, title, `method`,request_method, operator_type, oper_name, oper_url, oper_param, json_result,error_msg,oper_time
+        from operate_log
+    </sql>
+
+    <insert id="insertLog" parameterType="com.sunrise.domain.WaterStation">
+        insert into operate_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="method != null">`method`,</if>
+            <if test="requestMethod != null">request_method,</if>
+            <if test="operatorType != null">operator_type,</if>
+            <if test="operName != null">oper_name,</if>
+            <if test="operUrl != null">oper_url,</if>
+            <if test="operParam != null">oper_param,</if>
+            <if test="jsonResult != null">json_result,</if>
+            <if test="errorMsg != null">error_msg,</if>
+            <if test="operTime != null">oper_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="method != null">#{method},</if>
+            <if test="requestMethod != null">#{requestMethod},</if>
+            <if test="operatorType != null">#{operatorType},</if>
+            <if test="operName != null">#{operName},</if>
+            <if test="operUrl != null">#{operUrl},</if>
+            <if test="operParam != null">#{operParam},</if>
+            <if test="jsonResult != null">#{jsonResult},</if>
+            <if test="errorMsg != null">#{errorMsg},</if>
+            <if test="operTime != null">#{operTime},</if>
+        </trim>
+    </insert>
+
+
+
+    <delete id="deleteWaterStationById" parameterType="Long">
+        delete from water_station where id = #{id}
+    </delete>
+
+    <delete id="deleteWaterStationByIds" parameterType="String">
+        delete from water_station where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
