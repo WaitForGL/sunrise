@@ -43,7 +43,7 @@ spring:
 # 配置mybatis/mybatis-plus（下面相应改一下即可）
 mybatis:
   #指定pojo扫描包位置让mybatis自动扫描到指定义的pojo包下
-  type-aliases-package: com.water.waterresource.domain	# xml映射文件中实体类起别名,修改成自己的pojo包即可
+  type-aliases-package: com.sunrise.domain	# xml映射文件中实体类起别名,修改成自己的pojo包即可
   #指定位置扫描Mapper接口对应的XML文件 classpath:xml文件位置
   mapper-locations: classpath:mapper/*.xml
   configuration:

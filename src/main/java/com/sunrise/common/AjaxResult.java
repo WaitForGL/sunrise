@@ -1,4 +1,4 @@
-package com.sunrise;
+package com.sunrise.common;
 
 
 import com.sunrise.utils.StringUtils;

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.ClassManageMapper">
+
+    <resultMap type="com.sunrise.domain.classmanage.ClassManage" id="ClassManageResult">
+        <result property="id"    column="id"    />
+        <result property="className"    column="class_name"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+
+    <sql id="selectClassManage">
+        select id, class_name,major_name,create_time,status
+        from tb_class_manage
+    </sql>
+
+
+    <select id="selectIsExist" parameterType="com.sunrise.domain.classmanage.ClassManage" resultMap="ClassManageResult">
+        <include refid="selectClassManage"/>
+        <where>
+            <if test="username != null "> and username = #{username}</if>
+            <if test="password != null "> and password = #{password}</if>
+        </where>
+    </select>
+
+    <select id="selectById" parameterType="com.sunrise.domain.classmanage.ClassManage" resultMap="ClassManageResult">
+        <include refid="selectClassManage"/>
+        <where>
+            id = #{id}
+            and  status = 0
+        </where>
+    </select>
+
+
+
+
+
+</mapper>

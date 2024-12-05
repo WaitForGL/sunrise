@@ -1,4 +1,5 @@
-package com.sunrise.utils;
+package com.sunrise.common;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class SimpleCORSFilter implements Filter{
+public class SimpleCORSFilter implements Filter {
+    //解决跨域
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
