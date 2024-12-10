@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.ClassRoomMapper">
+
+    <resultMap type="com.sunrise.domain.classroom.ClassRoom" id="RoomResult">
+        <result property="id"    column="id"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="roomSize"    column="room_size"    />
+        <result property="useStatus"    column="use_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+
+    <sql id="selectRoom">
+        select id, room_name,room_size,use_status,create_time,status
+        from tb_class_room
+    </sql>
+
+
+    <select id="detail" parameterType="com.sunrise.domain.classroom.ClassRoom" resultMap="RoomResult">
+        <include refid="selectRoom"/>
+        <where>
+            id=#{id}
+        </where>
+    </select>
+
+
+    <select id="selectById" parameterType="com.sunrise.domain.classroom.ClassRoom" resultMap="RoomResult">
+        <include refid="selectRoom"/>
+        <where>
+            <if test="roomName != null "> and room_name = #{roomName}</if>
+            and status = 0
+        </where>
+    </select>
+
+    <select id="selectList" parameterType="com.sunrise.domain.classroom.ClassRoom" resultMap="RoomResult">
+        <include refid="selectRoom"/>
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="roomName != null "> and room_name = #{roomName}</if>
+             and status = 0
+        </where>
+    </select>
+
+    <insert id="addClassRoom" parameterType="com.sunrise.domain.user.User">
+        insert into tb_class_room
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomName != null">room_name,</if>
+            <if test="roomSize != null">room_size,</if>
+            <if test="useStatus != null">use_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomName != null">#{roomName},</if>
+            <if test="roomSize != null">#{roomSize},</if>
+            <if test="useStatus != null">#{useStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.sunrise.domain.user.User">
+        update tb_class_room
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomName != null">room_name = #{roomName},</if>
+            <if test="roomSize != null">room_size = #{roomSize},</if>
+            <if test="useStatus != null">use_status = #{useStatus},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+
+
+
+</mapper>

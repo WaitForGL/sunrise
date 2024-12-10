@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.TaskPointMapper">
+
+    <resultMap type="com.sunrise.domain.TaskPoint" id="TaskPointResult">
+        <result property="id"    column="id"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuPoint"    column="stu_point"    />
+
+    </resultMap>
+
+
+    <sql id="selectTaskPoint">
+        select id, task_id,stu_id,stu_point
+        from tb_task_point
+    </sql>
+
+
+    <select id="stuList"  resultMap="TaskPointResult">
+        <include refid="selectTaskPoint"/>
+        <where>
+            task_id = #{taskId}
+        </where>
+    </select>
+
+
+
+
+    <insert id="insertStu" parameterType="com.sunrise.domain.TaskPoint">
+        insert into tb_task_point
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">task_id,</if>
+            <if test="stuId != null">stu_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">#{taskId},</if>
+            <if test="stuId != null">#{stuId},</if>
+        </trim>
+    </insert>
+
+
+    <update id="setPoint" parameterType="com.sunrise.domain.TaskPoint">
+        update tb_task_point
+        set stu_point = #{stuPoint}
+        where id = #{id}
+    </update>
+
+
+
+
+
+
+</mapper>

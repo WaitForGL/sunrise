@@ -2,8 +2,9 @@ package com.sunrise.controller;
 
 import com.sunrise.common.AjaxResult;
 import com.sunrise.domain.classmanage.ClassManage;
+import com.sunrise.domain.classroom.ClassRoom;
 import com.sunrise.domain.user.User;
-import com.sunrise.service.ClassManageService;
+import com.sunrise.service.ClassRoomService;
 import com.sunrise.utils.QueryWithPageDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,15 +14,15 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("/room")
 @RestController
-@RequestMapping("/class")
-public class ClassManageController {
+public class ClassRoomController {
 
     @Resource
-    private ClassManageService classManageService;
+    private ClassRoomService classRoomService;
 
     @GetMapping("/list")
-    public Object list(Integer pageNo, Integer pageSize, ClassManage classManage){
+    public Object list(Integer pageNo, Integer pageSize, ClassRoom classRoom){
         if(pageNo==null){
             pageNo = 1;
         }
@@ -29,7 +30,7 @@ public class ClassManageController {
             pageSize = 10;
         }
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        List<ClassManage> list = classManageService.selectList(classManage);
+        List<ClassRoom> list = classRoomService.selectList(classRoom);
         //调用pageable分页参数
         int pageNumber = pageable.getPageNumber();
         int size = pageable.getPageSize();
@@ -50,30 +51,30 @@ public class ClassManageController {
 
     }
 
-    @GetMapping("/detail")
-    public AjaxResult detail(ClassManage classManage){
-        List<User> userList = classManageService.detail(classManage);
-        return AjaxResult.success("班级学生",userList);
+    @PostMapping("/detail")
+    public AjaxResult detail(@RequestBody ClassRoom classRoom){
+        ClassRoom newClassRoom = classRoomService.detail(classRoom);
+        return AjaxResult.success("详情",newClassRoom);
     }
 
     @PostMapping("/add")
-    public AjaxResult addUser(@RequestBody ClassManage classManage){
-        classManageService.addClassManage(classManage);
+    public AjaxResult addUser(@RequestBody ClassRoom classRoom){
+        classRoomService.addClassRoom(classRoom);
         return AjaxResult.success("新增成功");
     }
 
     @PostMapping("/update")
-    public AjaxResult updateById(@RequestBody ClassManage classManage){
-        classManageService.updateById(classManage);
+    public AjaxResult updateById(@RequestBody ClassRoom classRoom){
+        classRoomService.updateById(classRoom);
         return AjaxResult.success("更新成功");
     }
 
     @PostMapping("/remove")
-    public AjaxResult removeById(@RequestBody ClassManage classManage){
-        ClassManage newClass = new ClassManage();
-        newClass.setId(classManage.getId());
-        newClass.setStatus(1);
-        classManageService.updateById(newClass);
+    public AjaxResult removeById(@RequestBody ClassRoom classRoom){
+        ClassRoom newRoom = new ClassRoom();
+        newRoom.setId(classRoom.getId());
+        newRoom.setStatus(1);
+        classRoomService.updateById(newRoom);
         return AjaxResult.success("删除成功");
     }
 }

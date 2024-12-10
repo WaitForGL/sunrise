@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.TaskMapper">
+
+    <resultMap type="com.sunrise.domain.task.Task" id="TaskResult">
+        <result property="id"    column="id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="proName"    column="pro_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="shouldNum"    column="should_num"    />
+        <result property="alreadyNum"    column="already_num"    />
+    </resultMap>
+
+
+    <sql id="selectTask">
+        select id, task_name,room_name,pro_name,class_name,teacher_name,start_time,end_time,status,create_time,should_num,already_num
+        from tb_task
+    </sql>
+
+    <select id="list" parameterType="com.sunrise.domain.task.Task" resultMap="TaskResult">
+        <include refid="selectTask"/>
+        <where>
+            <if test="taskName != null "> and task_name = #{taskName}</if>
+            <if test="teacherName != null "> and teacher_name = #{teacherName}</if>
+            <if test="className != null "> and class_name = #{className}</if>
+            and status = 0
+        </where>
+    </select>
+
+
+    <select id="selectById" parameterType="com.sunrise.domain.task.Task" resultMap="TaskResult">
+        <include refid="selectTask"/>
+        <where>
+            id = #{taskId}
+        </where>
+    </select>
+
+    <select id="selectByName" parameterType="com.sunrise.domain.task.Task" resultMap="TaskResult">
+        <include refid="selectTask"/>
+        <where>
+            task_name = #{taskName}
+        </where>
+    </select>
+
+
+
+
+
+    <insert id="addTask" parameterType="com.sunrise.domain.task.Task">
+        insert into tb_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskName != null">task_name,</if>
+            <if test="roomName != null">room_name,</if>
+            <if test="proName != null">pro_name,</if>
+            <if test="className != null">class_name,</if>
+            <if test="teacherName != null">teacher_name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="shouldNum != null">should_num,</if>
+            <if test="alreadyNum != null">already_num,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskName != null">#{taskName},</if>
+            <if test="roomName != null">#{roomName},</if>
+            <if test="proName != null">#{proName},</if>
+            <if test="className != null">#{className},</if>
+            <if test="teacherName != null">#{teacherName},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="shouldNum != null">#{shouldNum},</if>
+            <if test="alreadyNum != null">#{alreadyNum},</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateById" parameterType="com.sunrise.domain.task.Task">
+        update tb_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskName != null">task_name = #{taskName},</if>
+            <if test="roomName != null">room_name = #{roomName},</if>
+            <if test="proName != null">pro_name = #{proName},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="teacherName != null">teacher_name = #{teacherName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="shouldNum != null">should_num = #{shouldNum},</if>
+            <if test="alreadyNum != null">already_num = #{alreadyNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+
+
+</mapper>

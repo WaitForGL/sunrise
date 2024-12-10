@@ -8,24 +8,18 @@
         <result property="id"    column="id"    />
         <result property="className"    column="class_name"    />
         <result property="majorName"    column="major_name"    />
+        <result property="stuNum"    column="stu_num"    />
         <result property="createTime"    column="create_time"    />
         <result property="status"    column="status"    />
+
     </resultMap>
 
 
     <sql id="selectClassManage">
-        select id, class_name,major_name,create_time,status
+        select id, class_name,major_name,stu_num,create_time,status
         from tb_class_manage
     </sql>
 
-
-    <select id="selectIsExist" parameterType="com.sunrise.domain.classmanage.ClassManage" resultMap="ClassManageResult">
-        <include refid="selectClassManage"/>
-        <where>
-            <if test="username != null "> and username = #{username}</if>
-            <if test="password != null "> and password = #{password}</if>
-        </where>
-    </select>
 
     <select id="selectById" parameterType="com.sunrise.domain.classmanage.ClassManage" resultMap="ClassManageResult">
         <include refid="selectClassManage"/>
@@ -34,6 +28,45 @@
             and  status = 0
         </where>
     </select>
+
+
+    <select id="selectList" parameterType="com.sunrise.domain.classmanage.ClassManage" resultMap="ClassManageResult">
+        <include refid="selectClassManage"/>
+        <where>
+            <if test="className != null "> and class_name = #{className}</if>
+            and status = 0
+        </where>
+    </select>
+
+    <insert id="addClassManage" parameterType="com.sunrise.domain.classmanage.ClassManage">
+        insert into tb_class_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="className != null">class_name,</if>
+            <if test="majorName != null">major_name,</if>
+            <if test="stuNum != null">stu_num,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="className != null">#{className},</if>
+            <if test="majorName != null">#{majorName},</if>
+            <if test="stuNum != null">#{stuNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.sunrise.domain.user.User">
+        update tb_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="className != null">class_name = #{className},</if>
+            <if test="majorName != null">major_name = #{majorName},</if>
+            <if test="stuNum != null">stu_num = #{stuNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
 
 
 

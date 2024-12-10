@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunrise.mapper.SeatMapper">
+
+    <resultMap type="com.sunrise.domain.seat.Seat" id="SeatResult">
+        <result property="id"    column="id"    />
+        <result property="lineNum"    column="line_num"    />
+        <result property="verticalNum"    column="vertical_num"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="username"    column="username"    />
+        <result property="status"    column="status"    />
+        <result property="handStatus"    column="hand_status"    />
+        <result property="signStatus"    column="sign_status"    />
+        <result property="taskId"    column="task_id"    />
+    </resultMap>
+
+
+    <sql id="selectSeat">
+        select id, line_num,vertical_num,room_id,username,status,hand_status,sign_status,task_id
+        from tb_seat
+    </sql>
+
+
+    <select id="signList" parameterType="com.sunrise.domain.classroom.ClassRoom" resultMap="SeatResult">
+        <include refid="selectSeat"/>
+        <where>
+            room_id = #{id}
+            and sign_status = 1
+        </where>
+    </select>
+
+    <select id="selectList" parameterType="com.sunrise.domain.classroom.ClassRoom" resultMap="SeatResult">
+        <include refid="selectSeat"/>
+        <where>
+            room_id = #{id}
+        </where>
+    </select>
+
+    <select id="selectById" resultMap="SeatResult">
+        <include refid="selectSeat"/>
+        <where>
+            room_id = #{id}
+        </where>
+    </select>
+
+
+
+
+
+    <insert id="insertSeat" parameterType="com.sunrise.domain.seat.Seat">
+        insert into tb_seat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="lineNum != null">line_num,</if>
+            <if test="verticalNum != null">vertical_num,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="username != null">username,</if>
+            <if test="status != null">status,</if>
+            <if test="handStatus != null">hand_status,</if>
+            <if test="signStatus != null">sign_status,</if>
+            <if test="taskId != null">task_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="lineNum != null">#{lineNum},</if>
+            <if test="verticalNum != null">#{verticalNum},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="username != null">#{username},</if>
+            <if test="status != null">#{status},</if>
+            <if test="handStatus != null">#{handStatus},</if>
+            <if test="signStatus != null">#{signStatus},</if>
+            <if test="taskId != null">#{taskId},</if>
+
+        </trim>
+    </insert>
+
+
+    <update id="sign" parameterType="com.sunrise.domain.seat.Seat">
+        update tb_seat
+        set sign_status = 1 , username = #{username}
+        where id = #{id}
+    </update>
+
+    <update id="handup" parameterType="com.sunrise.domain.seat.Seat">
+        update tb_seat
+        set hand_status = 1
+        where id = #{id}
+    </update>
+
+
+
+
+</mapper>

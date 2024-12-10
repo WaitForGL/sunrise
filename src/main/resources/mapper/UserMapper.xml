@@ -34,6 +34,7 @@
         <include refid="selectUser"/>
         <where>
             <if test="username != null "> and username = #{username}</if>
+            <if test="belongId != null "> and belong_id = #{belongId}</if>
              and status = 0
         </where>
     </select>
@@ -71,6 +72,22 @@
         </trim>
         where id = #{id}
     </update>
+
+
+    <select id="selectByClassId" parameterType="com.sunrise.domain.classmanage.ClassManage" resultMap="UserResult">
+        <include refid="selectUser"/>
+        <where>
+            belong_id = #{id}
+            and status = 0
+        </where>
+    </select>
+
+    <select id="selectById"  resultMap="UserResult">
+        select id, username
+        from tb_user
+        where id = #{stuId}
+    </select>
+
 
 
 </mapper>
